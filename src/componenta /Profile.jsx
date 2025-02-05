@@ -6,20 +6,15 @@ function Profile() {
 	const [nameValue, setNameValue] = useState("");
 	const [emailValue, setEmailValue] = useState("");
 	const [fileValue, setFileValue] = useState("");
-	const [styleForm, setStyleFOrm] = useState(false);
-	const [styleDiv, setStyleDiv] = useState(true);
 
-     function hendalEdit(){
-        setStyleDiv(true);
-		setStyleFOrm(false);
+	const { values, add, remove, edit } = UseProfile();
 
-     }
-
-     const {values,add} = UseProfile()
-
-     console.log(values);
-     
-
+	function hendalEdit() {
+		edit(values.id, { nameValue, emailValue, fileValue });
+	}
+   function hendalDelit(id) {
+       remove(id)
+   }
 	function hendalSubmit(e) {
 		e.preventDefault();
 		const data = {
@@ -27,17 +22,14 @@ function Profile() {
 			emailValue,
 			fileValue,
 		};
-        add(data)
-		setStyleDiv(false);
-		setStyleFOrm(true);
+		add(data);
 	}
 
 	return (
 		<div>
 			<form
-				style={styleForm ? { display: "none" } : { display: "block" }}
 				onSubmit={hendalSubmit}
-				className='flex flex-col items-center gap-2 border p-4 '>
+				className='flex flex-col items-center gap-2 border p-4  '>
 				<input
 					onChange={(e) => {
 						setNameValue(e.target.value);
@@ -59,7 +51,7 @@ function Profile() {
 						setFileValue(URL.createObjectURL(e.target.files[0]));
 					}}
 					type='file'
-                    accept="image/*"
+					accept='image/*'
 					className='border p-2'
 				/>
 				<button
@@ -68,18 +60,33 @@ function Profile() {
 					Add
 				</button>
 			</form>
-			<div style={styleDiv ? { display: "none" } : { display: "block" }}>
-                {
-                    values.length > 0 && values.map((item, index) => {
-                        return <div key={index}>
-                            <img src={item.fileValue} alt=""  className="w-20 rounded-full"/>
-                            <h1>{item.nameValue}</h1>
-                            <p>{item.emailValue}</p>
-                        </div>
-                    })
-
-                }
-				<button onClick={hendalEdit}>Edit</button>
+			<div className='flex flex-wrap mt-10 gap-4'>
+				{values.length > 0 &&
+					values.map((item, index) => {
+						return (
+							<div
+								className='flex flex-col items-center shadow-lg p-4 w-3/10'
+								key={index}>
+								<img
+									src={item.fileValue}
+									alt=''
+									className='w-20 rounded-full h-20'
+								/>
+								<h1 className='text-2xl'>{item.nameValue}</h1>
+								<p>{item.emailValue}</p>
+								<button
+									className='border px-4 py-2 bg-blue-500 text-white rounded-3xl'
+									onClick={() => hendalEdit(item)}>
+									Edit
+								</button>
+                                <button
+    									className='border px-4 py-2 bg-blue-500 text-white rounded-3xl'
+									onClick={() => hendalDelit(item)}>
+									Delit
+								</button>
+							</div>
+						);
+					})}
 			</div>
 		</div>
 	);

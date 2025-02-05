@@ -6,6 +6,16 @@ const UseProfile =create((set)=>({
     set(function (state) {
       return {values: [...state.values,value]}
     })
+   },
+   remove:(id)=>{
+    set(function (state) {
+      return {values: state.values.filter((item) => item.id !== id)}
+    })
+   },
+   edit:(id,newValue)=>{
+    set(function (state) {
+      return {values: state.values.map((item) => item.id === id ? newValue : item)}
+    })
    }
 }))
 
